@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html ng-app="ToDoList">
+<head>
+    <meta charset="UTF-8">
+    <title>toDo list con Factories</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="controller.js"></script>
+    <script src="../angular-local-storage-master/dist/angular-local-storage.min.js"></script>
+    <style>
+	.mostrar{
+	background-color: red;
+	}
+	.nomostrar{
+	background-color: green;
+	}
+	table, td, th {
+   	border: 1px solid black;
+	}
+	table {
+    	border-collapse: collapse;
+	}
+	td{
+	padding:5px;
+	}
+    </style>
+</head>
+<body ng-controller="ToDoController" ng-init="mostrar = true">
+<h3>Lista de tareas</h3>
+<label ng-show="mostrar">
+	<table>
+	<tr>
+	<td>Prioridad</td>
+	<td>Descripcion</td>
+	<td>Fecha</td>
+	<td>Recordatorio</td>
+	<td>Borrar fila</td>
+	</tr>
+	<tr ng-repeat="actividad in todo | orderBy:'prioridad'">
+	<td>{{actividad.prioridad}}</td>
+	<td>{{actividad.descripcion}}</td>
+	<td>{{actividad.fecha | date: 'short'}}</td>
+	<td>{{actividad.recordatorio}}</td>
+	<td><a href="#" ng-click="removeActv(actividad)" style="color:red;text-decoration: none">X</a></td>
+	</tr>
+	</table>
+</label>
+{{todo}}<p>
+<button ng-click="mostrar = false" ng-show="mostrar" ng-class="{'mostrar':mostrar}">Ocultar contenido</button>
+<button ng-click="mostrar = true" ng-hide="mostrar" ng-class="{'nomostrar':!mostrar}">Mostrar contenido</button>
+<button ng-click="clean()">Limpiar lista</button>
+<h3>Insertar una nueva tarea</h3>
+<form ng-submit="addActv()">
+    Seleccione la prioridad:
+    <select ng-model="newActv.prioridad">
+        <option value="Alta">Alta</option>
+        <option value="Media">Media</option>
+        <option value="Baja">Baja</option>
+    </select>
+    <br>
+    Introduce una descripcion: <input type="text" ng-model="newActv.descripcion">
+    <br>
+    Introduce la fecha: <input type="datetime-local" ng-model="newActv.fecha">
+    <br>
+    Seleccione una opcion del recordatorio: <br>
+    <input type="radio" name="recordatorio" ng-model="newActv.recordatorio" value="Recordar">Recordar</input><br>
+    <input type="radio" name="recordatorio" ng-model="newActv.recordatorio" value="No recordar">No recordar</input><br>
+    <input type="radio" name="recordatorio" ng-model="newActv.recordatorio" value="NS/NC">NS/NC</input><p>
+    <input type="submit" value="Guardar actividad">
+</form>
+</body>
+</html>
